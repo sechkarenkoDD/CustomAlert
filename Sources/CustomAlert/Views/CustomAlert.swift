@@ -176,7 +176,7 @@ import SwiftUI
                     .captureSize($contentSize)
                 }
                 .frame(height: height)
-                .onChange(of: contentSize) { contentSize in
+                .onChange(of: contentSize) { _, contentSize in
                     fitInScreen = contentSize.height <= proxy.size.height
                 }
                 .onChange(of: proxy.size) { _, size in
@@ -220,7 +220,7 @@ import SwiftUI
         .padding(configuration.padding)
         .transition(configuration.transition)
         .animation(.default, value: isPresented)
-        .onChange(of: dynamicTypeSize) { _ in
+        .onChange(of: dynamicTypeSize) {
             redrawAlert()
         }
     }
