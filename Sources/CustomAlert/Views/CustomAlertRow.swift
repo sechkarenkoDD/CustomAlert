@@ -61,7 +61,6 @@ public struct CustomAlertRow<Content>: View where Content: View {
     }
 }
 
-@available(iOS 17.0, visionOS 1.0, *)
 #Preview {
     @Previewable @State var isPresented = false
     List {

@@ -1,3 +1,5 @@
+> This fork targets iOS 26.0 and later. It is based on upstream CustomAlert 6.0.1. On iOS 27.1+, alerts avoid active fold regions using the public reserved-regions API. Building requires the iOS 27.1 SDK; the minimum deployment target remains iOS 26.0. Device validation is in progress.
+
 # CustomAlert
 
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fdivadretlaw%2FCustomAlert%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/divadretlaw/CustomAlert)
@@ -16,9 +18,8 @@ If the content is too large because the text is too long or the text doesn't fit
 | iOS | SwiftUI Alert | Custom Alert |
 |:---:|:-------------:|:------------:|
 | iOS 26+ | ![Native Alert](Sources/CustomAlert/Documentation.docc/Resources/SwiftUI_liquidGlass.png) | ![Custom Alert](Sources/CustomAlert/Documentation.docc/Resources/Custom_liquidGlass.png) |
-| iOS 15 - iOS 18 | ![Native Alert](Sources/CustomAlert/Documentation.docc/Resources/SwiftUI_classic.png) | ![Custom Alert](Sources/CustomAlert/Documentation.docc/Resources/Custom_classic.png) |
 
-On iOS 26, the default configuration is based on `CustomAlertConfiguration.liquidGlass` and on previous iOS versions `CustomAlertConfiguration.classic`.
+The default configuration on iOS is based on `CustomAlertConfiguration.liquidGlass`.
 
 You can easily add an Image or change the Font used in the alert, or anything else to your imagination.
 

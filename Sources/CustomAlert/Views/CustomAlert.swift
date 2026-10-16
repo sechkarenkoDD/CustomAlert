@@ -19,7 +19,6 @@ import SwiftUI
 
     // Size holders to enable scrolling of the content if needed
     @State private var viewSize: CGSize = .zero
-    @State private var safeAreaInsets: EdgeInsets = .zero
     @State private var contentSize: CGSize = .zero
     @State private var actionsSize: CGSize = .zero
     @State private var alertId: Int = 0
@@ -54,6 +53,8 @@ import SwiftUI
 
     public var body: some View {
         GeometryReader { proxy in
+            let availableFrame = availableFrame(in: proxy)
+
             ZStack {
                 BackgroundView(background: configuration.background)
                     .edgesIgnoringSafeArea(.all)
@@ -83,11 +84,16 @@ import SwiftUI
                         Spacer()
                     }
                 }
+                .frame(width: availableFrame.width, height: availableFrame.height)
+                .captureSize($viewSize)
+                .padding(EdgeInsets(
+                    top: availableFrame.minY,
+                    leading: availableFrame.minX,
+                    bottom: max(0, proxy.size.height - availableFrame.maxY),
+                    trailing: max(0, proxy.size.width - availableFrame.maxX)
+                ))
             }
-            .frame(maxWidth: proxy.totalWidth, maxHeight: proxy.totalHeight)
-            .captureTotalSize($viewSize)
         }
-        .captureSafeAreaInsets($safeAreaInsets)
         .onAppear {
             if configuration.animateTransition {
                 withAnimation {
@@ -99,13 +105,29 @@ import SwiftUI
         }
     }
 
+    private func availableFrame(in proxy: GeometryProxy) -> CGRect {
+        let bounds = CGRect(origin: .zero, size: proxy.size)
+        if #available(iOS 27.1, visionOS 27.1, *) {
+            // SwiftUI returns mirrored coordinates by default. Leading/trailing
+            // padding below uses the same convention, including in RTL layouts.
+            let divisions = proxy.reservedRegions(kind: .division).map { region in
+                CGRect(
+                    x: region.frame.minX - region.margins.leading,
+                    y: region.frame.minY - region.margins.top,
+                    width: region.frame.width + region.margins.leading + region.margins.trailing,
+                    height: region.frame.height + region.margins.top + region.margins.bottom
+                )
+            }
+            return AlertPlacement.availableFrame(in: bounds, avoiding: divisions)
+        }
+        return bounds
+    }
+
     var height: CGFloat {
         // View height - padding top and bottom - actions height - extra padding
         let maxHeight = viewSize.height
             - configuration.padding.top
             - configuration.padding.bottom
-            - safeAreaInsets.top
-            - safeAreaInsets.bottom
             - actionsSize.height
             - 20
         let min = min(maxHeight, contentSize.height)
@@ -127,11 +149,9 @@ import SwiftUI
         let maxWidth = viewSize.width
             - configuration.padding.leading
             - configuration.padding.trailing
-            - safeAreaInsets.leading
-            - safeAreaInsets.trailing
         // Make sure it fits in the content
         let min = min(maxWidth, contentSize.width)
-        return max(min, configuration.alert.minWidth(state))
+        return Swift.min(Swift.max(maxWidth, 0), Swift.max(min, configuration.alert.minWidth(state)))
     }
 
     var alert: some View {
@@ -154,14 +174,15 @@ import SwiftUI
                     .padding(configuration.alert.padding(state))
                     .frame(maxWidth: .infinity)
                     .captureSize($contentSize)
-                    // Force `Environment.isEnabled` to `true` because outer ScrollView is most likely disabled
-                    .environment(\.isEnabled, true)
                 }
                 .frame(height: height)
                 .onChange(of: contentSize) { contentSize in
                     fitInScreen = contentSize.height <= proxy.size.height
                 }
-                .scrollViewDisabled(fitInScreen)
+                .onChange(of: proxy.size) { _, size in
+                    fitInScreen = contentSize.height <= size.height
+                }
+                .scrollDisabled(fitInScreen)
             }
             .frame(height: height)
 
@@ -240,16 +261,6 @@ private extension VerticalAlignment {
         default:
             return true
         }
-    }
-}
-
-private extension GeometryProxy {
-    var totalWidth: CGFloat {
-        size.width + safeAreaInsets.leading + safeAreaInsets.trailing
-    }
-
-    var totalHeight: CGFloat {
-        size.height + safeAreaInsets.top + safeAreaInsets.bottom
     }
 }
 

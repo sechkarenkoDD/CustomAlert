@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-// Using UIViewRepresentable BlurView for backwards compatibility
+// Preserve the explicitly requested UIKit blur style.
 struct BlurView: UIViewRepresentable {
     let style: UIBlurEffect.Style
 

@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "CustomAlert",
     platforms: [
-        .iOS(.v15),
+        .iOS("26.0"),
         .visionOS(.v1)
     ],
     products: [
@@ -25,6 +25,7 @@ let package = Package(
             swiftSettings: [
                 // .define("CUSTOM_ALERT_DESIGN")
             ]
-        )
+        ),
+        .testTarget(name: "CustomAlertTests", dependencies: ["CustomAlert"])
     ]
 )

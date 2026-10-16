@@ -26,19 +26,8 @@ struct BackgroundView: View {
         case .anyView(let view):
             view
         case .glass(let color):
-            #if swift(>=6.2) && !os(visionOS)
-            if #available(iOS 26.0, *) {
-                Color.clear.glassEffect(.regular.tint(color), in: RoundedRectangle(cornerRadius: configuration.alert.cornerRadius))
-            } else {
-                if let color {
-                    ZStack {
-                        color
-                        BlurView(style: .systemMaterial)
-                    }
-                } else {
-                    BlurView(style: .systemMaterial)
-                }
-            }
+            #if !os(visionOS)
+            Color.clear.glassEffect(.regular.tint(color), in: RoundedRectangle(cornerRadius: configuration.alert.cornerRadius))
             #else
             if let color {
                 ZStack {

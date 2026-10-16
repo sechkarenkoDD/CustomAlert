@@ -110,7 +110,6 @@ extension Button {
     ///     - role: An optional semantic role describing the button.
     ///             A value of `nil` means that the button doesn't have an assigned role.
     ///     - action: The action to perform when the user triggers the button.
-    @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
     public init(
         _ titleResource: LocalizedStringResource,
         role: ButtonRole? = nil,
@@ -170,7 +169,6 @@ extension Button {
     ///     - role: An optional semantic role describing the button.
     ///             A value of `nil` means that the button doesn't have an assigned role.
     ///     - action: The action to perform when the user triggers the button.
-    @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
     public init(
         _ titleResource: LocalizedStringResource,
         systemImage: String,

@@ -8,7 +8,7 @@
 import SwiftUI
 
 #if DEBUG
-@available(iOS 16.0, *)
+
 struct AlertPreview: View {
     @State private var showNativeAlert = false
     @State private var showCustomAlert = false

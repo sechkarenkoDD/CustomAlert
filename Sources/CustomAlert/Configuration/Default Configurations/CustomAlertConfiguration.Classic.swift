@@ -117,12 +117,11 @@ extension CustomAlertConfiguration.Button {
 }
 
 #if DEBUG
-@available(iOS 17.0, *)
+
 #Preview("Default") {
     AlertPreview(title: "Title", content: "Content")
 }
 
-@available(iOS 17.0, *)
 #Preview("Lorem Ipsum") {
     AlertPreview(title: "Title", content: .loremIpsum)
 }

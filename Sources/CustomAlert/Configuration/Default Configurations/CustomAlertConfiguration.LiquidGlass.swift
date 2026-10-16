@@ -10,7 +10,7 @@ import SwiftUI
 
 extension CustomAlertConfiguration {
     /// The default configuration for a liquid glass alert
-    @available(iOS 26.0, visionOS 26.0, *)
+    @available(visionOS 26.0, *)
     nonisolated public static var liquidGlass: CustomAlertConfiguration {
         MainActor.runSync {
             CustomAlertConfiguration(
@@ -29,7 +29,7 @@ extension CustomAlertConfiguration {
 
 extension CustomAlertConfiguration.Alert {
     /// The default configuration for a liquid glass alert
-    @available(iOS 26.0, visionOS 26.0, *)
+    @available(visionOS 26.0, *)
     nonisolated public static var liquidGlass: CustomAlertConfiguration.Alert {
         CustomAlertConfiguration.Alert(
             background: .glass(),
@@ -80,7 +80,7 @@ extension CustomAlertConfiguration.Alert {
 
 extension CustomAlertConfiguration.Button {
     /// The default configuration for a liquid glass alert
-    @available(iOS 26.0, visionOS 26.0, *)
+    @available(visionOS 26.0, *)
     nonisolated public static var liquidGlass: CustomAlertConfiguration.Button {
         MainActor.runSync {
             CustomAlertConfiguration.Button(
@@ -108,12 +108,11 @@ extension CustomAlertConfiguration.Button {
 }
 
 #if DEBUG
-@available(iOS 17.0, *)
+
 #Preview("Default") {
     AlertPreview(title: "Title", content: "Content")
 }
 
-@available(iOS 17.0, *)
 #Preview("Lorem Ipsum") {
     AlertPreview(title: "Title", content: .loremIpsum)
 }
