@@ -1,4 +1,4 @@
-> This fork targets iOS 26.0 and later. It is based on upstream CustomAlert 6.0.1. On iOS 27.1+, alerts avoid active fold regions using the public reserved-regions API. Building requires the iOS 27.1 SDK; the minimum deployment target remains iOS 26.0. Device validation is in progress.
+> This fork targets iOS 26.0 and later. It is based on upstream CustomAlert 6.0.1. On iOS 27.1+, alerts avoid active fold regions using the public reserved-regions API. Building requires the iOS 27.1 SDK; the minimum deployment target remains iOS 26.0. Folded and unfolded alert placement was manually verified in the iPhone Duo simulator. The placement test suite passes all seven tests.
 
 # CustomAlert
 
