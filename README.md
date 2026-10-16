@@ -12,7 +12,7 @@ This is an independent fork of [David Walter’s CustomAlert](https://github.com
 | Build environment | Xcode 27.1 with the iOS 27.1 SDK |
 | Fold-aware placement | iOS 27.1 or later |
 
-The package also retains upstream visionOS support. The validation described below covers iOS, not visionOS.
+**visionOS is unverified.** Its platform declaration and implementation are inherited from upstream. This fork has not been built or tested for visionOS, and does not claim verified visionOS compatibility. The validation described here covers iOS only.
 
 ## Changes in this fork
 
@@ -21,9 +21,9 @@ The package also retains upstream visionOS support. The validation described bel
 - The dimmed background continues to cover the window while the dialog moves into its available region.
 - Alert width is constrained to the available region, and scrolling is updated when the available height changes.
 - Custom button styling, vertical actions, and `MultiButton` layouts remain available.
-- Compatibility fallbacks for iOS versions earlier than 26 have been removed, and deprecated `onChange` calls have been updated.
+- The minimum iOS deployment target is 26.0, and `onChange` uses the current API.
 
-On iOS 26, alerts use the existing presentation without querying reserved regions. The `.classic` configuration remains an optional style; it does not imply support for older iOS versions.
+On iOS 26, alerts use the existing presentation without querying reserved regions.
 
 ## Installation
 
@@ -69,14 +69,6 @@ The default configuration on iOS is based on `CustomAlertConfiguration.liquidGla
 
 You can easily add an Image or change the Font used in the alert, or anything else to your imagination.
 
-Something simple with an image and a text field
-
-<img src="Sources/CustomAlert/Documentation.docc/Resources/Fancy.png" width="300">
-
-Or more complex layouts
-
-<img src="Sources/CustomAlert/Documentation.docc/Resources/Complex.png" width="300">
-
 The API is very similar to the SwiftUI Alerts
 
 ```swift
@@ -94,7 +86,7 @@ The API is very similar to the SwiftUI Alerts
     } label: {
         Label("Swift", systemImage: "swift")
     }
-    
+
     Button(role: .cancel) {
         // some Action
     } label: {
@@ -127,8 +119,6 @@ You can create Side by Side Buttons using `MultiButton`
 
 The alert is customizable via the `Environment`
 
-<img src="Sources/CustomAlert/Documentation.docc/Resources/CustomConfiguration.png" width="300">
-
 ```swift
 .configureCustomAlert { configuration in
     // Adapt the default configuration
@@ -136,8 +126,6 @@ The alert is customizable via the `Environment`
 ```
 
 You can also display an Alert inline, within a `List` for example
-
-<img src="Sources/CustomAlert/Documentation.docc/Resources/InlineAlert.png" width="300">
 
 ```swift
 CustomAlertRow {
@@ -159,7 +147,7 @@ The usage screenshots above are inherited upstream examples of styling, not evid
 
 Clone this fork and check out `ios26-base` to work on the library. You can temporarily use a local Swift package dependency while developing. After validation, publish a new version tag and update consuming apps to that exact version; keep published tags unchanged.
 
-Version 7.0.0 raises the minimum iOS version from upstream’s iOS 15 to iOS 26. This fork is not a drop-in upgrade for apps that support earlier iOS releases.
+Version 7.0.0 requires a minimum iOS deployment target of 26.0.
 
 ## Credits and license
 
