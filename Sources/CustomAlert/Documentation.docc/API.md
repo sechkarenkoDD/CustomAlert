@@ -7,17 +7,8 @@ The API is very similar to the SwiftUI Alerts
 | iOS | SwiftUI Alert | Custom Alert |
 |:---:|:-------------:|:------------:|
 | iOS 26+ | ![Native Alert](SwiftUI_liquidGlass) | ![Custom Alert](Custom_liquidGlass) |
-| iOS 15 - iOS 18 | ![Native Alert](SwiftUI_classic) | ![Custom Alert](Custom_classic) |
 
 You can easily add an Image or change the Font used in the alert, or anything else to your imagination.
-
-Something simple with an image and a text field
-
-![Custom Alert](Fancy)
-
-Or more complex layouts
-
-![Custom Alert](Complex)
 
 The API is very similar to the SwiftUI Alerts
 
@@ -36,7 +27,7 @@ The API is very similar to the SwiftUI Alerts
     } label: {
         Label("Swift", systemImage: "swift")
     }
-    
+
     Button(role: .cancel) {
         // some Action
     } label: {
@@ -45,19 +36,19 @@ The API is very similar to the SwiftUI Alerts
 }
 ```
 
-You can create Side by Side Buttons using `ActionHStack`
+You can create Side by Side Buttons using `MultiButton`
 
 ```swift
 .customAlert("Alert with Side by Side Buttons", isPresented: $showAlert) {
     Text("Choose left or right")
 } actions: {
-    ActionHStack {
+    MultiButton {
         Button {
             // some Action
         } label: {
             Text("Left")
         }
-        
+
         Button {
             // some Action
         } label: {
@@ -69,8 +60,6 @@ You can create Side by Side Buttons using `ActionHStack`
 
 The alert is customizable via the `Environment`
 
-![Inline Alert](CustomConfiguration)
-
 ```swift
 .configureCustomAlert { configuration in
     // Adapt the default configuration
@@ -78,8 +67,6 @@ The alert is customizable via the `Environment`
 ```
 
 You can also display an Alert inline, within a `List` for example
-
-![Inline Alert](InlineAlert)
 
 ```swift
 CustomAlertRow {

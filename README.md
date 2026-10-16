@@ -1,34 +1,75 @@
 # CustomAlert
 
-[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fdivadretlaw%2FCustomAlert%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/divadretlaw/CustomAlert)
-[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fdivadretlaw%2FCustomAlert%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/divadretlaw/CustomAlert)
+A customizable SwiftUI alert library for iOS 26 and later, with fold-aware placement on iPhone Duo.
 
-## Why
+This is an independent fork of [David Walter’s CustomAlert](https://github.com/divadretlaw/CustomAlert), based on upstream version 6.0.1. The fork’s first release is **7.0.0**. Development takes place on the [`ios26-base`](https://github.com/sechkarenkoDD/CustomAlert/tree/ios26-base) branch.
 
-In iOS Alerts cannot contain Images or anything other than Text. This allows you to easily customize the message part with any custom view.
+> This README describes release 7.0.0. Use the version tag for installation or the `ios26-base` branch for development; source code on `main` still tracks the upstream baseline.
 
-While the alert is completely rebuilt in SwiftUI, it has been designed to look and behave exactly like a native alert. The alert uses it's own window to be displayed and utilizes accessibility scaling but with the advantage of a custom view.
+## Requirements
 
-If the content is too large because the text is too long or the text doesn't fit because of accessibility scaling the content will scroll just like in a SwiftUI Alert.
+| Requirement | Version |
+| --- | --- |
+| Minimum iOS deployment target | iOS 26.0 |
+| Build environment | Xcode 27.1 with the iOS 27.1 SDK |
+| Fold-aware placement | iOS 27.1 or later |
+
+**visionOS is unverified.** Its platform declaration and implementation are inherited from upstream. This fork has not been built or tested for visionOS, and does not claim verified visionOS compatibility. The validation described here covers iOS only.
+
+## Changes in this fork
+
+- Alerts avoid active fold regions using the public `reservedRegions` API on iOS 27.1 and later.
+- With a vertical fold, the dialog uses the trailing region. With a horizontal fold, it prefers the upper region. When no active division region intersects the view, it uses the full available safe area.
+- The dimmed background continues to cover the window while the dialog moves into its available region.
+- Alert width is constrained to the available region, and scrolling is updated when the available height changes.
+- Custom button styling, vertical actions, and `MultiButton` layouts remain available.
+- The minimum iOS deployment target is 26.0, and `onChange` uses the current API.
+
+On iOS 26, alerts use the existing presentation without querying reserved regions.
+
+## Installation
+
+In Xcode, choose **File → Add Package Dependencies** and enter:
+
+```text
+https://github.com/sechkarenkoDD/CustomAlert.git
+```
+
+Select **Exact Version** and enter **7.0.0** for a reproducible dependency on the verified release.
+
+For a Swift package:
+
+```swift
+.package(url: "https://github.com/sechkarenkoDD/CustomAlert.git", exact: "7.0.0")
+```
+
+Add the product to your target’s dependencies:
+
+```swift
+.product(name: "CustomAlert", package: "CustomAlert")
+```
+
+Then import the library:
+
+```swift
+import CustomAlert
+```
+
+SPM resolves WindowKit and its dependencies automatically. Consumers do not need a local checkout of this repository.
+
+## Features
+
+CustomAlert presents SwiftUI content in its own window. It supports custom message views, images, text fields, configurable buttons, and Dynamic Type. Message content can scroll when it exceeds the available height.
 
 ## Usage
 
 | iOS | SwiftUI Alert | Custom Alert |
 |:---:|:-------------:|:------------:|
 | iOS 26+ | ![Native Alert](Sources/CustomAlert/Documentation.docc/Resources/SwiftUI_liquidGlass.png) | ![Custom Alert](Sources/CustomAlert/Documentation.docc/Resources/Custom_liquidGlass.png) |
-| iOS 15 - iOS 18 | ![Native Alert](Sources/CustomAlert/Documentation.docc/Resources/SwiftUI_classic.png) | ![Custom Alert](Sources/CustomAlert/Documentation.docc/Resources/Custom_classic.png) |
 
-On iOS 26, the default configuration is based on `CustomAlertConfiguration.liquidGlass` and on previous iOS versions `CustomAlertConfiguration.classic`.
+The default configuration on iOS is based on `CustomAlertConfiguration.liquidGlass`.
 
 You can easily add an Image or change the Font used in the alert, or anything else to your imagination.
-
-Something simple with an image and a text field
-
-<img src="Sources/CustomAlert/Documentation.docc/Resources/Fancy.png" width="300">
-
-Or more complex layouts
-
-<img src="Sources/CustomAlert/Documentation.docc/Resources/Complex.png" width="300">
 
 The API is very similar to the SwiftUI Alerts
 
@@ -56,13 +97,13 @@ The API is very similar to the SwiftUI Alerts
 }
 ```
 
-You can create Side by Side Buttons using `HActionStack`
+You can create Side by Side Buttons using `MultiButton`
 
 ```swift
 .customAlert("Alert with Side by Side Buttons", isPresented: $showAlert) {
     Text("Choose left or right")
 } actions: {
-    HActionStack {
+    MultiButton {
         Button {
             // some Action
         } label: {
@@ -80,8 +121,6 @@ You can create Side by Side Buttons using `HActionStack`
 
 The alert is customizable via the `Environment`
 
-<img src="Sources/CustomAlert/Documentation.docc/Resources/CustomConfiguration.png" width="300">
-
 ```swift
 .configureCustomAlert { configuration in
     // Adapt the default configuration
@@ -89,8 +128,6 @@ The alert is customizable via the `Environment`
 ```
 
 You can also display an Alert inline, within a `List` for example
-
-<img src="Sources/CustomAlert/Documentation.docc/Resources/InlineAlert.png" width="300">
 
 ```swift
 CustomAlertRow {
@@ -100,14 +137,20 @@ CustomAlertRow {
 }
 ```
 
-## Install
+## Validation
 
-### SwiftPM
+- Seven Swift Testing tests cover placement with no fold, vertical and horizontal folds, a fold outside the window, partial-window fallbacks, and a zero-width region.
+- Folded and unfolded placement was manually verified in the iPhone Duo simulator on iOS 27.1.
+- The consuming iOS app builds without warnings after the `onChange` migration.
 
-```
-https://github.com/divadretlaw/CustomAlert.git
-```
+The usage screenshots above are inherited upstream examples of styling, not evidence of fold testing. Horizontal-fold placement, right-to-left layouts, large accessibility text sizes, and visionOS still need dedicated visual validation.
 
-## License
+## Development
 
-See [LICENSE](LICENSE)
+Clone this fork and check out `ios26-base` to work on the library. You can temporarily use a local Swift package dependency while developing. After validation, publish a new version tag and update consuming apps to that exact version; keep published tags unchanged.
+
+Version 7.0.0 requires a minimum iOS deployment target of 26.0.
+
+## Credits and license
+
+Original library by [David Walter](https://github.com/divadretlaw). This fork preserves the original license and copyright notices. See [LICENSE](LICENSE).
